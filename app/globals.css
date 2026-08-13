@@ -9,3 +9,6 @@
 footer{min-height:70px;display:flex;align-items:center;justify-content:space-between;max-width:1240px;margin:auto;border-top:1px solid var(--line);padding:18px 32px;color:var(--muted);font-size:12px}footer a{color:var(--navy);text-decoration:none}
 @media(max-width:800px){.topbar{height:92px;padding:8px 20px}.brand{width:125px;height:75px}.card-link{font-size:12px}.hero{grid-template-columns:1fr;padding:50px 24px}.hero-art{height:320px;order:-1}.core{width:150px;height:150px;top:82px}.core span{font-size:65px}.orbit-one{width:270px;height:220px}.orbit-two{width:330px;height:270px}.hero h1{font-size:50px}.hero-copy>p{font-size:17px}.trust{gap:10px;flex-wrap:wrap}.question-card{padding:36px 22px}.answers{grid-template-columns:1fr}.question-number{display:none}.result-grid{grid-template-columns:1fr}.result-main{padding:28px}.result-cta{align-items:stretch;flex-direction:column;padding:28px}.result-cta a{text-align:center}footer{flex-direction:column;gap:8px;text-align:center}.quiz-wrap,.result-wrap{padding:36px 18px 70px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
+/* Hebrew reading order: question numbering begins on the right. */
+.question-number{right:28px;left:auto;direction:ltr}
