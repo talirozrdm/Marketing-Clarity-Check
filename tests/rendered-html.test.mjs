@@ -16,6 +16,6 @@ test("server-renders the branded diagnostic", async () => {
   assert.match(html, /מה באמת עוצר את השיווק שלך/);
   assert.match(html, /שיווק דיגיטלי/);
   assert.match(html, /tali-digicard\.vercel\.app/);
-  assert.match(html, /גלי מה מעכב אותך/);
+  assert.match(html, /גלי מה מעכב את השיווק שלך/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/);
 });

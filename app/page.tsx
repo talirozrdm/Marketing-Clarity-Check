@@ -99,29 +99,29 @@ export default function Home() {
   const restart = () => { setStarted(false); setStep(0); setAnswers([]); };
   const result = results[calculation.primaryBottleneck];
   const confidenceLabel = calculation.confidence === "HIGH" ? "גבוהה" : calculation.confidence === "MEDIUM" ? "בינונית" : "אין מספיק מידע";
+  const stage = step < CORE_QUESTIONS.length ? 1 : done ? 3 : 2;
+  const secondaryExplanation = calculation.secondaryBottleneck ? `יש גם סימנים ל${results[calculation.secondaryBottleneck].title}, אבל כרגע כדאי לטפל קודם ב${result.title}. לפי התשובות שלך, הטיפול בפער המרכזי עשוי להקל גם על הפער הנוסף.` : null;
 
   return <main dir="rtl">
     <header className="topbar">
       <a className="brand" href="#" onClick={(e) => { e.preventDefault(); restart(); }} aria-label="טלי רוזנברג — התחלה">
-        <img src="/tali-logo.png" alt="טלי רוזנברג — שיווק דיגיטלי חכם לעסקים קטנים" />
+        <img src="/tali-mark.png" alt="TR — טלי רוזנברג" />
       </a>
-      <div className="brand-promise"><span>שיווק דיגיטלי</span><strong>״חכם״</strong><span>לעסקים קטנים</span></div>
-      <a className="card-link" href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer"><span className="button-copy"><small>רוצים שיווק שעובד בשביל העסק?</small>בואו נכיר</span><b>←</b></a>
+      <div className="tool-name"><strong>בדיקת השיווק החכם</strong><span>אבחון ממוקד לעסקים קטנים</span></div>
     </header>
 
     {!started ? <section className="hero">
       <div className="hero-copy">
         <span className="kicker"><i /> מנוע אבחון שיווקי אסטרטגי • כ־4 דקות</span>
         <h1>השיווק שלך לא צריך<br/><em>עוד רעש. הוא צריך דיוק.</em></h1>
-        <p>אני לא מאמינה שעסק קטן צריך לעשות הכול. הוא צריך לדעת מה נכון לו עכשיו. האבחון הזה יעזור לך לזהות את צוואר הבקבוק שמגביל את הצמיחה — ולהבין איפה להשקיע ועל מה אפשר לוותר.</p>
-        <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב אותך</span><b>←</b></button>
+        <p>אבחון קצר שיעזור לך לזהות את צוואר הבקבוק שמגביל את הצמיחה — ולהבין איפה להתמקד ועל מה אפשר לוותר כרגע.</p>
+        <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב את השיווק שלך</span><b>←</b></button>
         <div className="trust"><span>חשיבה אסטרטגית</span><span>תוצאה מותאמת</span><span>צעד מעשי אחד</span></div>
-        <p className="expert-note"><strong>אני טלי רוזנברג, ונעים להכיר.</strong><br/>אני מחברת אסטרטגיה, תוכן, אוטומציה ו־AI כדי לבנות לעסקים קטנים שיווק מדויק שאפשר באמת להחזיק.</p>
       </div>
       <div className="hero-art" aria-hidden="true"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="core"><span>?</span><small>הפער<br/>המרכזי</small></div><div className="signal-card signal-one"><b>01</b><span>מזהות<br/>את החסם</span></div><div className="signal-card signal-two"><b>02</b><span>בוחרות<br/>מיקוד</span></div><div className="signal-card signal-three"><b>03</b><span>מתקדמות<br/>חכם</span></div><div className="dot d1"/><div className="dot d2"/><div className="dot d3"/></div>
     </section> : !done ? <section className="quiz-wrap">
-      <div className="progress-head"><span>שאלה {step + 1} מתוך {questions.length}</span><span>{Math.round(((step + 1)/questions.length)*100)}%</span></div>
-      <div className="progress"><i style={{width: `${((step + 1)/questions.length)*100}%`}} /></div>
+      <div className="progress-head"><span>שלב {stage} מתוך 3</span><span>{stage === 1 ? "מיפוי ראשוני" : "דיוק האבחון"}</span></div>
+      <div className="progress"><i style={{width: `${stage === 1 ? 34 : 68}%`}} /></div>
       <article className="question-card">
         <span className="question-number">0{step + 1}</span>
         <p className="eyebrow">{questions[step].eyebrow}</p>
@@ -133,10 +133,10 @@ export default function Home() {
       <div className="result-intro"><span className="kicker"><i /> האבחון שלך מוכן</span><p>{calculation.primaryBottleneck === "INSUFFICIENT_EVIDENCE" ? "התוצאה שלך כרגע" : "הפער המרכזי שלך כרגע"}</p><h1>{result.title}</h1><div className="confidence">רמת ודאות: <strong>{confidenceLabel}</strong></div></div>
       <div className="result-grid">
         <article className="result-main"><h3>למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
-        <aside><div className="focus-box"><small>המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="step-box"><span>01</span><div><small>הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><span>×</span><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div>{calculation.secondaryBottleneck && <div className="secondary-box"><small>פער משני</small><p>יש גם סימן ל־{results[calculation.secondaryBottleneck].title}, אבל כרגע {calculation.whyPrimaryComesFirst}.</p></div>}</aside>
+        <aside><div className="focus-box"><small>המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="action-pair"><div className="step-box"><span>01</span><div><small>הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><span>×</span><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></div>{secondaryExplanation && <div className="secondary-box"><small>פער משני</small><p>{secondaryExplanation}</p></div>}</aside>
       </div>
       <div className="tali-note"><div className="mini-mark"><img src="/tali-mark.png" alt="הסמל של טלי רוזנברג" /></div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר. בדיוק בשביל זה בניתי את האבחון הזה.</p><strong>טלי</strong></div></div>
-      <div className="result-cta"><div><small>האבחון הוא נקודת ההתחלה. הדיוק קורה בעבודה משותפת.</small><h2>אם התוצאה פגשה בדיוק את מה שקורה בעסק שלך — בואי נהפוך אותה לתוכנית שעובדת.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
+      <div className="result-cta"><div><small>רוצה להבין איך זה נראה בעסק שלך לעומק?</small><h2>אם התוצאה פגעה בנקודה שמוכרת לך, אפשר לבדוק יחד מה נכון לעשות מכאן.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
       <button className="restart" onClick={restart}>↻ להתחיל אבחון מחדש</button>
     </section>}
     <footer><span>© 2026 טלי רוזנברג • שיווק דיגיטלי <b>״חכם״</b> לעסקים קטנים</span><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">tali-digicard.vercel.app</a></footer>
