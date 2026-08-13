@@ -107,16 +107,17 @@ export default function Home() {
       <a className="brand" href="#" onClick={(e) => { e.preventDefault(); restart(); }} aria-label="טלי רוזנברג — התחלה">
         <img src="/tali-logo.png" alt="טלי רוזנברג — שיווק דיגיטלי חכם לעסקים קטנים" />
       </a>
-      <a className="card-link" href="https://tali-digital-card.vercel.app" target="_blank" rel="noreferrer">הכרטיס הדיגיטלי שלי <span>↗</span></a>
+      <a className="card-link" href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer"><small>טלי רוזנברג • אסטרטגיה ושיווק</small>בואו נכיר <span>↗</span></a>
     </header>
 
     {!started ? <section className="hero">
       <div className="hero-copy">
-        <span className="kicker"><i /> אבחון שיווקי אישי • כ־4 דקות</span>
-        <h1>מה באמת עוצר<br/><em>את השיווק שלך?</em></h1>
-        <p>לא עוד רשימת משימות. אבחון קצר שיעזור לך לזהות את צוואר הבקבוק המרכזי, להבין במה להתמקד — ומה ממש לא צריך לעשות עכשיו.</p>
-        <button className="primary" onClick={() => setStarted(true)}>בואי נתחיל <span>←</span></button>
-        <div className="trust"><span>ללא הרשמה</span><span>תוצאה אישית</span><span>מיקוד מעשי</span></div>
+        <span className="kicker"><i /> מנוע אבחון שיווקי אסטרטגי • כ־4 דקות</span>
+        <h1>השיווק שלך לא צריך<br/><em>עוד רעש. הוא צריך דיוק.</em></h1>
+        <p>אבחון ממוקד שיזהה את צוואר הבקבוק שמגביל כרגע את הצמיחה שלך — ויראה לך איפה נכון להשקיע, מה הצעד הבא, ועל מה אפשר להפסיק לבזבז זמן.</p>
+        <button className="primary" onClick={() => setStarted(true)}>גלי מה מעכב אותך <span>←</span></button>
+        <div className="trust"><span>חשיבה אסטרטגית</span><span>תוצאה מותאמת</span><span>צעד מעשי אחד</span></div>
+        <p className="expert-note"><strong>נבנה על ידי טלי רוזנברג</strong><br/>כדי להפוך עומס שיווקי להחלטות שמקדמות עסק.</p>
       </div>
       <div className="hero-art" aria-hidden="true"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="core"><span>?</span><small>הפער<br/>המרכזי</small></div><div className="dot d1"/><div className="dot d2"/><div className="dot d3"/></div>
     </section> : !done ? <section className="quiz-wrap">
@@ -135,9 +136,9 @@ export default function Home() {
         <article className="result-main"><h3>למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
         <aside><div className="focus-box"><small>המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="step-box"><span>01</span><div><small>הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><span>×</span><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></aside>
       </div>
-      <div className="result-cta"><div><small>רוצה להפוך את התובנה לתוכנית ברורה?</small><h2>בואי נכיר ונראה מה הצעד הנכון לעסק שלך.</h2></div><a href="https://tali-digital-card.vercel.app" target="_blank" rel="noreferrer">לכרטיס הדיגיטלי של טלי <span>←</span></a></div>
+      <div className="result-cta"><div><small>האבחון הוא נקודת ההתחלה. הדיוק קורה בעבודה משותפת.</small><h2>אם התוצאה פגשה בדיוק את מה שקורה בעסק שלך — בואי נהפוך אותה לתוכנית שעובדת.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
       <button className="restart" onClick={restart}>↻ להתחיל אבחון מחדש</button>
     </section>}
-    <footer><span>© 2026 טלי רוזנברג • שיווק דיגיטלי חכם לעסקים קטנים</span><a href="https://tali-digital-card.vercel.app" target="_blank" rel="noreferrer">tali-digital-card.vercel.app</a></footer>
+    <footer><span>© 2026 טלי רוזנברג • אסטרטגיה, תוכן ושיווק דיגיטלי חכם</span><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">tali-digicard.vercel.app</a></footer>
   </main>;
 }
