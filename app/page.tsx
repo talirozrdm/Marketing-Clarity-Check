@@ -107,16 +107,16 @@ export default function Home() {
       <a className="brand" href="#" onClick={(e) => { e.preventDefault(); restart(); }} aria-label="טלי רוזנברג — התחלה">
         <img src="/tali-logo.png" alt="טלי רוזנברג — שיווק דיגיטלי חכם לעסקים קטנים" />
       </a>
-      <a className="card-link" href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer"><small>טלי רוזנברג • אסטרטגיה ושיווק</small>בואו נכיר <span>↗</span></a>
+      <div className="brand-promise"><span>שיווק דיגיטלי</span><strong>״חכם״</strong><span>לעסקים קטנים</span></div>
+      <a className="card-link" href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer"><span className="button-copy"><small>רוצים שיווק שעובד בשביל העסק?</small>בואו נכיר</span><b>←</b></a>
     </header>
-    <div className="brand-promise"><span>שיווק דיגיטלי</span><strong>״חכם״</strong><span>לעסקים קטנים</span></div>
 
     {!started ? <section className="hero">
       <div className="hero-copy">
         <span className="kicker"><i /> מנוע אבחון שיווקי אסטרטגי • כ־4 דקות</span>
         <h1>השיווק שלך לא צריך<br/><em>עוד רעש. הוא צריך דיוק.</em></h1>
         <p>אני לא מאמינה שעסק קטן צריך לעשות הכול. הוא צריך לדעת מה נכון לו עכשיו. האבחון הזה יעזור לך לזהות את צוואר הבקבוק שמגביל את הצמיחה — ולהבין איפה להשקיע ועל מה אפשר לוותר.</p>
-        <button className="primary" onClick={() => setStarted(true)}>גלי מה מעכב אותך <span>←</span></button>
+        <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב אותך</span><b>←</b></button>
         <div className="trust"><span>חשיבה אסטרטגית</span><span>תוצאה מותאמת</span><span>צעד מעשי אחד</span></div>
         <p className="expert-note"><strong>אני טלי רוזנברג, ונעים להכיר.</strong><br/>אני מחברת אסטרטגיה, תוכן, אוטומציה ו־AI כדי לבנות לעסקים קטנים שיווק מדויק שאפשר באמת להחזיק.</p>
       </div>
@@ -128,7 +128,7 @@ export default function Home() {
         <span className="question-number">0{step + 1}</span>
         <p className="eyebrow">{questions[step].eyebrow}</p>
         <h2>{questions[step].title}</h2>
-        <div className="answers">{questions[step].answers.map((a,i) => <button key={a.label} onClick={() => choose(i)}><span>{a.label}</span><i>{String.fromCharCode(1488+i)}</i></button>)}</div>
+        <div className="answers">{questions[step].answers.map((a,i) => <button key={a.label} onClick={() => choose(i)}><i>{String.fromCharCode(1488+i)}</i><span>{a.label}</span></button>)}</div>
       </article>
       <button className="back" onClick={back}>→ חזרה</button>
     </section> : <section className="result-wrap">
@@ -137,7 +137,7 @@ export default function Home() {
         <article className="result-main"><h3>למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
         <aside><div className="focus-box"><small>המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="step-box"><span>01</span><div><small>הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><span>×</span><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></aside>
       </div>
-      <div className="tali-note"><div className="mini-mark">TR</div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר. בדיוק בשביל זה בניתי את האבחון הזה.</p><strong>טלי</strong></div></div>
+      <div className="tali-note"><div className="mini-mark"><img src="/tali-mark.png" alt="הסמל של טלי רוזנברג" /></div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר. בדיוק בשביל זה בניתי את האבחון הזה.</p><strong>טלי</strong></div></div>
       <div className="result-cta"><div><small>האבחון הוא נקודת ההתחלה. הדיוק קורה בעבודה משותפת.</small><h2>אם התוצאה פגשה בדיוק את מה שקורה בעסק שלך — בואי נהפוך אותה לתוכנית שעובדת.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
       <button className="restart" onClick={restart}>↻ להתחיל אבחון מחדש</button>
     </section>}
