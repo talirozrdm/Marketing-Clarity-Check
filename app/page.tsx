@@ -60,7 +60,7 @@ const legacyQuestions: Question[] = [
     { label: "אני לא בטוחה", scores: {}, unknown: true },
   ]},
   { eyebrow: "הדרך לפנייה", title: "אם מישהי מתעניינת, עד כמה ברור לה מה לעשות עכשיו?", answers: [
-    { label: "ברור מאוד — יש פעולה אחת פשוטה", scores: { CONVERSION_PATH: -20 } },
+    { label: "ברור מאוד. יש פעולה אחת פשוטה", scores: { CONVERSION_PATH: -20 } },
     { label: "בדרך כלל ברור", scores: { CONVERSION_PATH: -8 } },
     { label: "יש כמה אפשרויות שונות", scores: { CONVERSION_PATH: 15 } },
     { label: "לפעמים יש הנעה לפעולה ולפעמים לא", scores: { CONVERSION_PATH: 20 } },
@@ -76,13 +76,13 @@ const legacyQuestions: Question[] = [
 ];
 
 const results: Record<string, { title: string; why: string; impact: string; focus: string; first: string; not: string; summary: string }> = {
-  DIRECTION: { title: "חסר כיוון שיווקי ברור", why: "נראה שכמה מטרות או פעולות מתחרות כרגע על תשומת הלב שלך, בלי החלטה אחת שמארגנת את השיווק.", impact: "יותר התלבטויות, קפיצה בין רעיונות ותחושה שצריך לעשות הכול.", focus: "לבחור מטרה אחת והצעה מרכזית אחת לתקופה הקרובה.", first: "כתבי מה את רוצה שיקרה, מה את מקדמת כדי שזה יקרה ולמי.", not: "לא לפתוח עוד ערוץ ולא לרוץ לקמפיין חדש.", summary: "את לא צריכה לעשות יותר שיווק — את צריכה להחליט לאן הוא אמור לקחת את העסק." },
-  AUDIENCE_OFFER: { title: "הקהל או ההצעה עדיין לא מספיק מדויקים", why: "הכיוון קיים, אבל החיבור בין הלקוחה הנכונה, הצורך שלה וההצעה שלך עדיין אינו חד מספיק.", impact: "יותר פניות לא מתאימות, יותר הסברים ותגובה חלשה גם כשהשיווק פעיל.", focus: "לחדד למי ההצעה מתאימה במיוחד ומה היא פותרת עבורה עכשיו.", first: "בחרי לקוחה אמיתית ורשמי מה היא רצתה לפתור ולמה השירות שלך התאים.", not: "לא להגדיל חשיפה לפני שהחיבור בין הקהל להצעה ברור.", summary: "את לא צריכה להגיע ליותר אנשים — את צריכה שהאנשים הנכונים יבינו שזה בשבילם." },
-  MESSAGE_CONTENT: { title: "המסר והתוכן לא מספיק מחוברים למטרה", why: "יש פעילות ותוכן, אבל לא תמיד ברור איך כל פרסום מחזק את מה שאת רוצה לקדם.", impact: "הרבה יצירה בלי ודאות שהיא מייצרת הבנה, עניין או תנועה עסקית.", focus: "לחבר כל תוכן למסר אחד ולמטרה אחת.", first: "הגדירי 2–3 מסרים שהקהל חייב להבין לפני שיבחר בהצעה שלך.", not: "לא לפרסם יותר רק כדי להיות עקבית ולא להוסיף עוד פורמטים.", summary: "את לא צריכה יותר תוכן — את צריכה שכל תוכן יעשה עבודה ברורה." },
-  CONVERSION_PATH: { title: "הדרך מהשיווק לפנייה לא מספיק ברורה", why: "כבר נוצר עניין, אבל המעבר ממנו לפנייה או מהפנייה לשלב הבא אינו חלק מספיק.", impact: "אנשים מתעניינים או אפילו פונים, אבל חלק מהם הולכים לאיבוד בדרך.", focus: "לפשט את הדרך מהעניין לפנייה ולוודא שיש המשך ברור.", first: "בחרי פעולה אחת שאת רוצה שמתעניינת תעשה ובדקי שהיא בולטת ופשוטה.", not: "לא להזרים עוד תנועה למסלול לפני שמתקנים אותו.", summary: "את לא צריכה להביא יותר אנשים — את צריכה שמי שמתעניין ידע בדיוק איך להתקדם." },
-  REACH: { title: "הבסיס קיים — עכשיו חסרה חשיפה", why: "הכיוון והמסלול נראים תקינים יחסית, אבל לא נכנסים מספיק אנשים חדשים ורלוונטיים למערכת.", impact: "השיווק עובד כשפוגשים אותך, אבל אין מספיק הזדמנויות חדשות לקצב יציב.", focus: "להגדיל כניסה של אנשים רלוונטיים בלי לפרק את מה שכבר עובד.", first: "בחרי ערוץ חשיפה אחד שאפשר להפעיל בעקביות ולמדוד.", not: "לא לבנות מחדש את המיתוג או להחליף הצעה שעובדת.", summary: "את לא צריכה לבנות הכול מחדש — את צריכה להביא יותר מהאנשים הנכונים למה שכבר עובד." },
-  CAPACITY: { title: "השיווק דורש ממך יותר ממה שאפשר להחזיק", why: "התוכנית דורשת יותר זמן, פעולות או אנרגיה ממה שיש בפועל.", impact: "תחושה שאת מאחור, מתחילה מחדש או בוחרת בין העבודה עצמה לבין השיווק.", focus: "לצמצם למה שבאמת חשוב ולבנות דרך עבודה שאפשר להתמיד בה.", first: "חלקי משימות ל׳חייב לקרות׳, ׳אפשר להעביר׳ ו׳אפשר להפסיק׳.", not: "לא להוסיף פלטפורמה, תדירות או משימות חדשות.", summary: "את לא צריכה יותר משמעת — את צריכה שיווק שמתאים לזמן ולאנרגיה שבאמת יש לך." },
-  INSUFFICIENT_EVIDENCE: { title: "עוד מוקדם לקבוע מה באמת מעכב את השיווק שלך", why: "כרגע אין מספיק מידע עקבי כדי לזהות בביטחון צוואר בקבוק אחד. זה לא אומר שהשיווק לא עובד — אלא שעוד אין בסיס טוב להחלטה מה לשנות.", impact: "החלטות שמבוססות על תחושה במקום על מה שקורה בפועל.", focus: "לא לשנות עדיין. קודם לאסוף מינימום מידע במשך 14 יום.", first: "עקבי אחרי מקור כל פנייה, מה גרם לה לפנות, האם היא מתאימה ומה קרה בסוף.", not: "לא לשנות אסטרטגיה, להגדיל תקציב או להוסיף ערוצים לפני שיש בסיס להחלטה.", summary: "את לא צריכה כרגע לנחש מה לשפר — את צריכה מספיק מידע כדי לדעת מה באמת דורש שיפור." },
+  DIRECTION: { title: "חסר כיוון שיווקי ברור", why: "נראה שכמה מטרות או פעולות מתחרות כרגע על תשומת הלב שלך, בלי החלטה אחת שמארגנת את השיווק.", impact: "יותר התלבטויות, קפיצה בין רעיונות ותחושה שצריך לעשות הכול.", focus: "לבחור מטרה אחת והצעה מרכזית אחת לתקופה הקרובה.", first: "כתבי מה את רוצה שיקרה, מה את מקדמת כדי שזה יקרה ולמי.", not: "לא לפתוח עוד ערוץ ולא לרוץ לקמפיין חדש.", summary: "את לא צריכה לעשות יותר שיווק. את צריכה להחליט לאן הוא אמור לקחת את העסק." },
+  AUDIENCE_OFFER: { title: "הקהל או ההצעה עדיין לא מספיק מדויקים", why: "הכיוון קיים, אבל החיבור בין הלקוחה הנכונה, הצורך שלה וההצעה שלך עדיין אינו חד מספיק.", impact: "יותר פניות לא מתאימות, יותר הסברים ותגובה חלשה גם כשהשיווק פעיל.", focus: "לחדד למי ההצעה מתאימה במיוחד ומה היא פותרת עבורה עכשיו.", first: "בחרי לקוחה אמיתית ורשמי מה היא רצתה לפתור ולמה השירות שלך התאים.", not: "לא להגדיל חשיפה לפני שהחיבור בין הקהל להצעה ברור.", summary: "את לא צריכה להגיע ליותר אנשים. את צריכה שהאנשים הנכונים יבינו שזה בשבילם." },
+  MESSAGE_CONTENT: { title: "המסר והתוכן לא מספיק מחוברים למטרה", why: "יש פעילות ותוכן, אבל לא תמיד ברור איך כל פרסום מחזק את מה שאת רוצה לקדם.", impact: "הרבה יצירה בלי ודאות שהיא מייצרת הבנה, עניין או תנועה עסקית.", focus: "לחבר כל תוכן למסר אחד ולמטרה אחת.", first: "הגדירי 2–3 מסרים שהקהל חייב להבין לפני שיבחר בהצעה שלך.", not: "לא לפרסם יותר רק כדי להיות עקבית ולא להוסיף עוד פורמטים.", summary: "את לא צריכה יותר תוכן. את צריכה שכל תוכן יעשה עבודה ברורה." },
+  CONVERSION_PATH: { title: "הדרך מהשיווק לפנייה לא מספיק ברורה", why: "כבר נוצר עניין, אבל המעבר ממנו לפנייה או מהפנייה לשלב הבא אינו חלק מספיק.", impact: "אנשים מתעניינים או אפילו פונים, אבל חלק מהם הולכים לאיבוד בדרך.", focus: "לפשט את הדרך מהעניין לפנייה ולוודא שיש המשך ברור.", first: "בחרי פעולה אחת שאת רוצה שמתעניינת תעשה ובדקי שהיא בולטת ופשוטה.", not: "לא להזרים עוד תנועה למסלול לפני שמתקנים אותו.", summary: "את לא צריכה להביא יותר אנשים. את צריכה שמי שמתעניין ידע בדיוק איך להתקדם." },
+  REACH: { title: "הבסיס קיים. עכשיו חסרה חשיפה", why: "הכיוון והמסלול נראים תקינים יחסית, אבל לא נכנסים מספיק אנשים חדשים ורלוונטיים למערכת.", impact: "השיווק עובד כשפוגשים אותך, אבל אין מספיק הזדמנויות חדשות לקצב יציב.", focus: "להגדיל כניסה של אנשים רלוונטיים בלי לפרק את מה שכבר עובד.", first: "בחרי ערוץ חשיפה אחד שאפשר להפעיל בעקביות ולמדוד.", not: "לא לבנות מחדש את המיתוג או להחליף הצעה שעובדת.", summary: "את לא צריכה לבנות הכול מחדש. את צריכה להביא יותר מהאנשים הנכונים למה שכבר עובד." },
+  CAPACITY: { title: "השיווק דורש ממך יותר ממה שאפשר להחזיק", why: "התוכנית דורשת יותר זמן, פעולות או אנרגיה ממה שיש בפועל.", impact: "תחושה שאת מאחור, מתחילה מחדש או בוחרת בין העבודה עצמה לבין השיווק.", focus: "לצמצם למה שבאמת חשוב ולבנות דרך עבודה שאפשר להתמיד בה.", first: "חלקי משימות ל׳חייב לקרות׳, ׳אפשר להעביר׳ ו׳אפשר להפסיק׳.", not: "לא להוסיף פלטפורמה, תדירות או משימות חדשות.", summary: "את לא צריכה יותר משמעת. את צריכה שיווק שמתאים לזמן ולאנרגיה שבאמת יש לך." },
+  INSUFFICIENT_EVIDENCE: { title: "עוד מוקדם לקבוע מה באמת מעכב את השיווק שלך", why: "כרגע אין מספיק מידע עקבי כדי לזהות בביטחון צוואר בקבוק אחד. זה לא אומר שהשיווק לא עובד. עדיין אין בסיס טוב להחלטה מה לשנות.", impact: "החלטות שמבוססות על תחושה במקום על מה שקורה בפועל.", focus: "לא לשנות עדיין. קודם לאסוף מינימום מידע במשך 14 יום.", first: "עקבי אחרי מקור כל פנייה, מה גרם לה לפנות, האם היא מתאימה ומה קרה בסוף.", not: "לא לשנות אסטרטגיה, להגדיל תקציב או להוסיף ערוצים לפני שיש בסיס להחלטה.", summary: "את לא צריכה כרגע לנחש מה לשפר. את צריכה מספיק מידע כדי לדעת מה באמת דורש שיפור." },
 };
 
 const mapAreas: { id: Gap; label: string }[] = [
@@ -129,8 +129,8 @@ export default function Home() {
 
   return <main dir="rtl">
     <header className="topbar">
-      <a className="brand" href="#" onClick={(e) => { e.preventDefault(); restart(); }} aria-label="טלי רוזנברג — התחלה">
-        <img src="/tali-mark.png" alt="TR — טלי רוזנברג" />
+      <a className="brand" href="#" onClick={(e) => { e.preventDefault(); restart(); }} aria-label="טלי רוזנברג, חזרה להתחלה">
+        <img src="/tali-mark.png" alt="TR, טלי רוזנברג" />
       </a>
       <div className="tool-name"><strong>בדיקת השיווק החכם</strong><span>אבחון ממוקד לעסקים קטנים</span></div>
     </header>
@@ -139,17 +139,16 @@ export default function Home() {
       <div className="hero-copy">
         <span className="kicker"><i /> סריקה → זיהוי → מיקוד → פעולה</span>
         <h1>מה באמת מעכב את<br/><em>השיווק שלך עכשיו?</em></h1>
-        <p>אבחון קצר שמזהה את צוואר הבקבוק המרכזי בשיווק שלך ועוזר להבין במה להתמקד עכשיו — ומה אפשר להוריד מסדר היום.</p>
+        <p>אבחון קצר שמזהה את צוואר הבקבוק המרכזי בשיווק שלך ועוזר להבין במה להתמקד עכשיו, ומה אפשר להוריד מסדר היום.</p>
         <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב אותך</span><b>←</b></button>
         <div className="hero-meta">כ־4 דקות · ללא הרשמה · תוצאה אישית מיד בסיום</div>
       </div>
       <div className="hero-art"><DiagnosticMap preview /></div>
     </section> : !done ? <section className="quiz-wrap">
       <div className="journey-steps" aria-label={`שלב ${stage} מתוך 3`}><span className={stage >= 1 ? "active" : ""}><LineIcon name="goal" />מטרה</span><i /><span className={stage >= 2 ? "active" : ""}><LineIcon name="scan" />סריקה</span><i /><span className={stage >= 3 ? "active" : ""}><LineIcon name="focus" />מיקוד</span></div>
-      <div className="progress-head"><span className="stage-name">שלב {stage} מתוך 3</span><span>{stage === 1 ? "מיפוי ראשוני" : "סריקה ממוקדת"}</span></div>
+      <div className="progress-head"><span className="stage-name"><LineIcon name={stage === 1 ? "goal" : "scan"} />שלב {stage} מתוך 3</span><span>{stage === 1 ? "מיפוי ראשוני" : "סריקה ממוקדת"}</span></div>
       <div className="progress"><i style={{width: `${stage === 1 ? 34 : 68}%`}} /></div>
       <article className="question-card">
-        <span className="question-number">0{step + 1}</span>
         <p className="eyebrow">{questions[step].eyebrow}</p>
         <h2>{questions[step].title}</h2>
         <div className="answers">{questions[step].options.map((a,i) => <button key={a.id} className={selectedOption === a.id ? "selected" : ""} aria-pressed={selectedOption === a.id} onClick={() => choose(i)}><i>{selectedOption === a.id ? "✓" : String.fromCharCode(1488+i)}</i><span>{a.label}</span></button>)}</div>
@@ -157,13 +156,13 @@ export default function Home() {
       <button className="back" onClick={back}>→ חזרה</button>
     </section> : <section className="result-wrap">
       <div className="result-map-wrap"><div className="result-map-title"><span>מפת האבחון שלך</span><small>סריקה → זיהוי → מיקוד → פעולה</small></div><DiagnosticMap primary={calculation.primaryBottleneck} secondary={calculation.secondaryBottleneck} /><p>כאן נמצא כרגע צוואר הבקבוק המרכזי שלך.</p></div>
-      <div className="result-intro"><span className="kicker"><i /> האבחון שלך מוכן</span><p>{calculation.primaryBottleneck === "INSUFFICIENT_EVIDENCE" ? "התוצאה שלך כרגע" : "הפער המרכזי שלך כרגע"}</p><h1>{result.title}</h1><div className="confidence">רמת ודאות: <strong>{confidenceLabel}</strong></div></div>
+      <div className="result-intro"><p>{calculation.primaryBottleneck === "INSUFFICIENT_EVIDENCE" ? "השלמנו את הסריקה" : "מצאנו את צוואר הבקבוק שלך"}</p><h1>{result.title}</h1><div className="confidence">רמת ודאות: <strong>{confidenceLabel}</strong></div></div>
       <div className="result-grid">
         <article className="result-main"><h3><LineIcon name="search" />למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
         <aside><div className="focus-box"><small><LineIcon name="target" />המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="action-pair"><div className="step-box"><LineIcon name="forward" /><div><small>01 · הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><LineIcon name="pause" /><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></div>{secondaryExplanation && <div className="secondary-box"><small><LineIcon name="node" />פער משני</small><p>{secondaryExplanation}</p></div>}</aside>
       </div>
-      <div className="tali-note"><div className="mini-mark"><img src="/tali-mark.png" alt="TR" /></div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר.</p><strong>טלי רוזנברג <span>· שיווק דיגיטלי חכם לעסקים קטנים</span></strong></div></div>
-      <div className="result-cta"><div><small>רוצה להבין איך זה נראה בעסק שלך לעומק?</small><h2>אם התוצאה פגעה בנקודה שמוכרת לך, אפשר לבדוק יחד מה נכון לעשות מכאן.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
+      <div className="tali-note"><div><small>רגע לפני שאת ממשיכה</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר.</p><strong>טלי רוזנברג <span>שיווק דיגיטלי חכם לעסקים קטנים</span></strong></div></div>
+      <div className="result-cta"><div><small>רוצה להפוך את האבחון לתוכנית פעולה?</small><h2>אם זיהית כאן משהו שמוכר לך מהעסק, אפשר לבדוק יחד מה נכון לשנות קודם ואיך לעשות את זה בלי להעמיס עוד שיווק.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
       <button className="restart" onClick={restart}>↻ להתחיל אבחון מחדש</button>
     </section>}
     <footer><span>© 2026 טלי רוזנברג • שיווק דיגיטלי <b>״חכם״</b> לעסקים קטנים</span><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">tali-digicard.vercel.app</a></footer>

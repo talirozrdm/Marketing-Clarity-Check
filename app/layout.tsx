@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   icons: { icon: "/tali-logo.png" },
   openGraph: {
     title: "מה באמת מעכב את השיווק שלך עכשיו?",
-    description: "בדיקת השיווק החכם — אבחון קצר שמזהה את צוואר הבקבוק המרכזי בשיווק שלך.",
+    description: "בדיקת השיווק החכם. אבחון קצר שמזהה את צוואר הבקבוק המרכזי בשיווק שלך.",
     images: [{ url: "/og.png", width: 1200, height: 630, alt: "מפת בדיקת השיווק החכם" }],
     locale: "he_IL",
     type: "website",
