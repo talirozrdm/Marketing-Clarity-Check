@@ -85,16 +85,41 @@ const results: Record<string, { title: string; why: string; impact: string; focu
   INSUFFICIENT_EVIDENCE: { title: "עוד מוקדם לקבוע מה באמת מעכב את השיווק שלך", why: "כרגע אין מספיק מידע עקבי כדי לזהות בביטחון צוואר בקבוק אחד. זה לא אומר שהשיווק לא עובד — אלא שעוד אין בסיס טוב להחלטה מה לשנות.", impact: "החלטות שמבוססות על תחושה במקום על מה שקורה בפועל.", focus: "לא לשנות עדיין. קודם לאסוף מינימום מידע במשך 14 יום.", first: "עקבי אחרי מקור כל פנייה, מה גרם לה לפנות, האם היא מתאימה ומה קרה בסוף.", not: "לא לשנות אסטרטגיה, להגדיל תקציב או להוסיף ערוצים לפני שיש בסיס להחלטה.", summary: "את לא צריכה כרגע לנחש מה לשפר — את צריכה מספיק מידע כדי לדעת מה באמת דורש שיפור." },
 };
 
+const mapAreas: { id: Gap; label: string }[] = [
+  { id: "DIRECTION", label: "כיוון" },
+  { id: "AUDIENCE_OFFER", label: "קהל והצעה" },
+  { id: "MESSAGE_CONTENT", label: "מסר ותוכן" },
+  { id: "CONVERSION_PATH", label: "מסלול פנייה" },
+  { id: "REACH", label: "חשיפה" },
+  { id: "CAPACITY", label: "יכולת ביצוע" },
+];
+
+function LineIcon({ name }: { name: "goal" | "scan" | "focus" | "search" | "target" | "forward" | "pause" | "node" }) {
+  return <span className={`line-icon icon-${name}`} aria-hidden="true"><i /></span>;
+}
+
+function DiagnosticMap({ primary, secondary, preview = false }: { primary?: string; secondary?: string | null; preview?: boolean }) {
+  return <div className={`diagnostic-map ${preview ? "map-preview" : "map-result"}`} aria-label={preview ? "מפת תחומי האבחון השיווקי" : "מפת האבחון שלך"}>
+    <div className="map-route" aria-hidden="true" />
+    {mapAreas.map((area, index) => <div key={area.id} className={`map-node node-${index + 1}${primary === area.id ? " is-primary" : ""}${secondary === area.id ? " is-secondary" : ""}`}>
+      <span className="node-point">{primary === area.id ? "?" : ""}</span><small>{area.label}</small>
+    </div>)}
+    {preview && <div className="bottleneck-label"><i>?</i><span>צוואר הבקבוק?</span></div>}
+    <div className="map-arrow" aria-hidden="true">←</div>
+  </div>;
+}
+
 export default function Home() {
   const [started, setStarted] = useState(false);
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<AnswerRecord[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const coreAnswers = answers.filter(a => CORE_QUESTIONS.some(q => q.id === a.questionId));
   const branchQuestions = coreAnswers.length === CORE_QUESTIONS.length ? buildQuestionPath(coreAnswers) : [];
   const questions: EngineQuestion[] = [...CORE_QUESTIONS, ...branchQuestions];
   const done = step >= questions.length && coreAnswers.length === CORE_QUESTIONS.length;
   const calculation = useMemo(() => evaluateDiagnostic(answers), [answers]);
-  const choose = (i: number) => { const q=questions[step], option=q.options[i]; setAnswers([...answers, {questionId:q.id,optionId:option.id}]); setStep(step + 1); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const choose = (i: number) => { const q=questions[step], option=q.options[i]; if (selectedOption) return; setSelectedOption(option.id); window.setTimeout(() => { setAnswers(current => [...current, {questionId:q.id,optionId:option.id}]); setStep(current => current + 1); setSelectedOption(null); window.scrollTo({ top: 0, behavior: "smooth" }); }, 140); };
   const back = () => { if (step === 0) setStarted(false); else { setStep(step - 1); setAnswers(answers.slice(0,-1)); } };
   const restart = () => { setStarted(false); setStep(0); setAnswers([]); };
   const result = results[calculation.primaryBottleneck];
@@ -110,32 +135,34 @@ export default function Home() {
       <div className="tool-name"><strong>בדיקת השיווק החכם</strong><span>אבחון ממוקד לעסקים קטנים</span></div>
     </header>
 
-    {!started ? <section className="hero">
+    {!started ? <section className="hero scan-hero">
       <div className="hero-copy">
-        <span className="kicker"><i /> מנוע אבחון שיווקי אסטרטגי • כ־4 דקות</span>
-        <h1>השיווק שלך לא צריך<br/><em>עוד רעש. הוא צריך דיוק.</em></h1>
-        <p>אבחון קצר שיעזור לך לזהות את צוואר הבקבוק שמגביל את הצמיחה — ולהבין איפה להתמקד ועל מה אפשר לוותר כרגע.</p>
-        <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב את השיווק שלך</span><b>←</b></button>
-        <div className="trust"><span>חשיבה אסטרטגית</span><span>תוצאה מותאמת</span><span>צעד מעשי אחד</span></div>
+        <span className="kicker"><i /> סריקה → זיהוי → מיקוד → פעולה</span>
+        <h1>מה באמת מעכב את<br/><em>השיווק שלך עכשיו?</em></h1>
+        <p>אבחון קצר שמזהה את צוואר הבקבוק המרכזי בשיווק שלך ועוזר להבין במה להתמקד עכשיו — ומה אפשר להוריד מסדר היום.</p>
+        <button className="primary" onClick={() => setStarted(true)}><span className="button-copy">גלי מה מעכב אותך</span><b>←</b></button>
+        <div className="hero-meta">כ־4 דקות · ללא הרשמה · תוצאה אישית מיד בסיום</div>
       </div>
-      <div className="hero-art" aria-hidden="true"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="core"><span>?</span><small>הפער<br/>המרכזי</small></div><div className="signal-card signal-one"><b>01</b><span>מזהות<br/>את החסם</span></div><div className="signal-card signal-two"><b>02</b><span>בוחרות<br/>מיקוד</span></div><div className="signal-card signal-three"><b>03</b><span>מתקדמות<br/>חכם</span></div><div className="dot d1"/><div className="dot d2"/><div className="dot d3"/></div>
+      <div className="hero-art"><DiagnosticMap preview /></div>
     </section> : !done ? <section className="quiz-wrap">
-      <div className="progress-head"><span>שלב {stage} מתוך 3</span><span>{stage === 1 ? "מיפוי ראשוני" : "דיוק האבחון"}</span></div>
+      <div className="journey-steps" aria-label={`שלב ${stage} מתוך 3`}><span className={stage >= 1 ? "active" : ""}><LineIcon name="goal" />מטרה</span><i /><span className={stage >= 2 ? "active" : ""}><LineIcon name="scan" />סריקה</span><i /><span className={stage >= 3 ? "active" : ""}><LineIcon name="focus" />מיקוד</span></div>
+      <div className="progress-head"><span className="stage-name">שלב {stage} מתוך 3</span><span>{stage === 1 ? "מיפוי ראשוני" : "סריקה ממוקדת"}</span></div>
       <div className="progress"><i style={{width: `${stage === 1 ? 34 : 68}%`}} /></div>
       <article className="question-card">
         <span className="question-number">0{step + 1}</span>
         <p className="eyebrow">{questions[step].eyebrow}</p>
         <h2>{questions[step].title}</h2>
-        <div className="answers">{questions[step].options.map((a,i) => <button key={a.id} onClick={() => choose(i)}><i>{String.fromCharCode(1488+i)}</i><span>{a.label}</span></button>)}</div>
+        <div className="answers">{questions[step].options.map((a,i) => <button key={a.id} className={selectedOption === a.id ? "selected" : ""} aria-pressed={selectedOption === a.id} onClick={() => choose(i)}><i>{selectedOption === a.id ? "✓" : String.fromCharCode(1488+i)}</i><span>{a.label}</span></button>)}</div>
       </article>
       <button className="back" onClick={back}>→ חזרה</button>
     </section> : <section className="result-wrap">
+      <div className="result-map-wrap"><div className="result-map-title"><span>מפת האבחון שלך</span><small>סריקה → זיהוי → מיקוד → פעולה</small></div><DiagnosticMap primary={calculation.primaryBottleneck} secondary={calculation.secondaryBottleneck} /><p>כאן נמצא כרגע צוואר הבקבוק המרכזי שלך.</p></div>
       <div className="result-intro"><span className="kicker"><i /> האבחון שלך מוכן</span><p>{calculation.primaryBottleneck === "INSUFFICIENT_EVIDENCE" ? "התוצאה שלך כרגע" : "הפער המרכזי שלך כרגע"}</p><h1>{result.title}</h1><div className="confidence">רמת ודאות: <strong>{confidenceLabel}</strong></div></div>
       <div className="result-grid">
-        <article className="result-main"><h3>למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
-        <aside><div className="focus-box"><small>המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="action-pair"><div className="step-box"><span>01</span><div><small>הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><span>×</span><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></div>{secondaryExplanation && <div className="secondary-box"><small>פער משני</small><p>{secondaryExplanation}</p></div>}</aside>
+        <article className="result-main"><h3><LineIcon name="search" />למה זה כנראה מה שמעכב אותך</h3><p>{result.why}</p><div className="impact"><small>מה זה יוצר בשיווק</small><p>{result.impact}</p></div><blockquote>{result.summary}</blockquote></article>
+        <aside><div className="focus-box"><small><LineIcon name="target" />המיקוד שלך עכשיו</small><h3>{result.focus}</h3></div><div className="action-pair"><div className="step-box"><LineIcon name="forward" /><div><small>01 · הצעד הראשון</small><p>{result.first}</p></div></div><div className="not-box"><LineIcon name="pause" /><div><small>מה כרגע לא צריך</small><p>{result.not}</p></div></div></div>{secondaryExplanation && <div className="secondary-box"><small><LineIcon name="node" />פער משני</small><p>{secondaryExplanation}</p></div>}</aside>
       </div>
-      <div className="tali-note"><div className="mini-mark"><img src="/tali-mark.png" alt="הסמל של טלי רוזנברג" /></div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר. בדיוק בשביל זה בניתי את האבחון הזה.</p><strong>טלי</strong></div></div>
+      <div className="tali-note"><div className="mini-mark"><img src="/tali-mark.png" alt="TR" /></div><div><small>רגע לפני שאת ממשיכה — ממני אלייך</small><p>אל תנסי לתקן הכול בבת אחת. אם תטפלי קודם במה שבאמת מגביל אותך, גם שאר השיווק יתחיל לעבוד חכם יותר.</p><strong>טלי רוזנברג <span>· שיווק דיגיטלי חכם לעסקים קטנים</span></strong></div></div>
       <div className="result-cta"><div><small>רוצה להבין איך זה נראה בעסק שלך לעומק?</small><h2>אם התוצאה פגעה בנקודה שמוכרת לך, אפשר לבדוק יחד מה נכון לעשות מכאן.</h2></div><a href="https://tali-digicard.vercel.app" target="_blank" rel="noreferrer">בואי נכיר <span>←</span></a></div>
       <button className="restart" onClick={restart}>↻ להתחיל אבחון מחדש</button>
     </section>}

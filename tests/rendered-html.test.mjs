@@ -13,9 +13,10 @@ test("server-renders the branded diagnostic", async () => {
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
   const html = await response.text();
-  assert.match(html, /מה באמת עוצר את השיווק שלך/);
+  assert.match(html, /מה באמת מעכב את/);
   assert.match(html, /שיווק דיגיטלי/);
   assert.match(html, /tali-digicard\.vercel\.app/);
-  assert.match(html, /גלי מה מעכב את השיווק שלך/);
+  assert.match(html, /גלי מה מעכב אותך/);
+  assert.match(html, /סריקה.*זיהוי.*מיקוד.*פעולה/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/);
 });
