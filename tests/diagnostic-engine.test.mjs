@@ -1,0 +1,22 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import vm from "node:vm";
+import ts from "typescript";
+import { createRequire } from "node:module";
+
+const source=fs.readFileSync(new URL("../app/diagnostic-engine.ts",import.meta.url),"utf8");
+const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
+const require=createRequire(import.meta.url); const module={exports:{}}; const sandbox={module,exports:module.exports,require,structuredClone,Set,Map,Object,Math}; vm.createContext(sandbox); vm.runInContext(js,sandbox); const {evaluateDiagnostic}=module.exports;
+const a=(pairs)=>pairs.map(([questionId,optionId])=>({questionId,optionId})); const base=[["goal","leads"],["focus","clear"],["source","mixed"]];
+
+test("הרבה חשיפה ופניות לא מתאימות — Reach נפסל",()=>{const r=evaluateDiagnostic(a([...base,["exposure","bad_leads"],["capacity","consistent"],["audience_check","mixed"],["message_check","topics"]]));assert.notEqual(r.primaryBottleneck,"REACH");assert.equal(r.statuses.REACH.eligibleForPrimary,false);});
+test("אין מטרה ואין פוקוס — Direction",()=>{const r=evaluateDiagnostic(a([["goal","foundation"],["focus","unsure"],["source","mixed"],["exposure","variable"],["capacity","dont_know"],["direction_check","many"],["capacity_check","unclear"]]));assert.equal(r.primaryBottleneck,"DIRECTION");});
+test("Interest + CTA ברור + טיפול לקוי — Conversion Post Lead",()=>{const r=evaluateDiagnostic(a([...base,["exposure","postlead"],["capacity","consistent"],["interest_action","cta_clear"],["postlead_check","lost"]]));assert.equal(r.primaryBottleneck,"CONVERSION_PATH");assert.equal(r.subtype,"POST_LEAD_LEAKAGE");});
+test("ברור מה לבצע ואין קיבולת — Capacity",()=>{const r=evaluateDiagnostic(a([...base,["exposure","good_leads"],["capacity","no_time"],["capacity_check","still_hard"],["reach_check","yes"]]));assert.equal(r.primaryBottleneck,"CAPACITY");});
+test("אין זמן כי לא ברור מה חשוב — Direction לפני Capacity",()=>{const r=evaluateDiagnostic(a([["goal","reduce_load"],["focus","many"],["source","mixed"],["exposure","variable"],["capacity","no_time"],["direction_check","many"],["capacity_check","unclear"]]));assert.equal(r.primaryBottleneck,"DIRECTION");});
+test("הרבה Unknown — Insufficient Evidence",()=>{const r=evaluateDiagnostic(a([["goal","leads"],["focus","unsure"],["source","unknown"],["exposure","unknown"],["capacity","unknown"],["direction_check","unknown"],["interest_action","unknown"]]));assert.equal(r.primaryBottleneck,"INSUFFICIENT_EVIDENCE");assert.equal(r.confidence,"INSUFFICIENT");});
+test("Reach גבוה אבל Message חלש — Reach אסור כ־Primary",()=>{const r=evaluateDiagnostic(a([["goal","reach"],["focus","clear"],["source","referrals"],["exposure","no_response"],["capacity","consistent"],["message_check","scattered"],["reach_check","none"]]));assert.notEqual(r.primaryBottleneck,"REACH");assert.equal(r.statuses.REACH.eligibleForPrimary,false);});
+test("Audience ו־Message גבוהים — Audience קודם",()=>{const r=evaluateDiagnostic(a([["goal","leads"],["focus","wide_audience"],["source","social"],["exposure","bad_leads"],["capacity","what_post"],["audience_check","mixed"],["message_check","scattered"]]));assert.equal(r.primaryBottleneck,"AUDIENCE_OFFER");});
+test("Message ו־Conversion גבוהים עם Interest — Conversion מתחזק",()=>{const r=evaluateDiagnostic(a([["goal","leads"],["focus","clear"],["source","social"],["exposure","interest_low_action"],["capacity","what_post"],["message_check","topics"],["interest_action","wants_blocked"]]));assert.equal(r.primaryBottleneck,"CONVERSION_PATH");});
+test("תיקו ללא הכרעה — Confidence אינו High",()=>{const r=evaluateDiagnostic(a([["goal","leads"],["focus","clear"],["source","social"],["exposure","variable"],["capacity","consistent"],["audience_check","unknown"],["message_check","unknown"]]));assert.notEqual(r.confidence,"HIGH");});
