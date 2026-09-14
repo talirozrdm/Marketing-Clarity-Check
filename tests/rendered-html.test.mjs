@@ -16,11 +16,11 @@ test("server-renders the branded diagnostic", async () => {
   const html = await response.text();
   assert.match(html, /מה באמת מעכב את/);
   assert.match(html, /שיווק דיגיטלי/);
-  assert.match(html, /tali-digicard\.vercel\.app/);
-  assert.match(html, /גלי מה מעכב אותך/);
-  assert.match(html, /סריקה.*זיהוי.*מיקוד.*פעולה/);
+  assert.match(html, /בדקי מה מעכב אותך/);
+  assert.match(html, /כ־4 דקות/);
   assert.doesNotMatch(html, /—/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/);
+  assert.match(fs.readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8"), /tali-digicard\.vercel\.app/);
 });
 
 test("user-facing Hebrew strings contain no internal English or em dash", () => {
