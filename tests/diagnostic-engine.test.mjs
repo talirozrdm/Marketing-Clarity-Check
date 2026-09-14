@@ -1,17 +1,19 @@
-import test from "node:test";import assert from "node:assert/strict";import fs from "node:fs";import vm from "node:vm";import ts from "typescript";import{createRequire}from"node:module";
-const source=fs.readFileSync(new URL("../app/diagnostic-engine.ts",import.meta.url),"utf8"),js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText,require=createRequire(import.meta.url),mod={exports:{}},sandbox={module:mod,exports:mod.exports,require,Set,Map,Object,Math};vm.createContext(sandbox);vm.runInContext(js,sandbox);const{CORE_QUESTIONS,evaluateDiagnostic,buildQuestionPath,buildClientStartingPoint}=mod.exports;const a=x=>x.map(([questionId,optionId])=>({questionId,optionId}));
-const healthy=[["goal","leads"],["direction","clear"],["audience","clear"],["offer","clear"],["message","clear"],["reach","steady"],["conversion","clear"],["management","routine_measured"]];const run=changes=>evaluateDiagnostic(a(healthy.map(([q,v])=>[q,changes[q]||v])));
-test("שמונה תחומים ושמונה שאלות ליבה",()=>{assert.equal(CORE_QUESTIONS.length,8);assert.equal(new Set(CORE_QUESTIONS.map(q=>q.id)).size,8)});
-test("A בסיס תקין ומחסור בחשיפה",()=>assert.equal(run({goal:"awareness",reach:"none"}).primary,"REACH"));
-test("B חוסר מטרה ופוקוס",()=>assert.equal(run({goal:"order",direction:"unknown",offer:"many"}).primary,"DIRECTION"));
-test("C פניות לא מתאימות פוסלות חשיפה",()=>{const r=run({audience:"bad_fit",reach:"unstable"});assert.equal(r.primary,"AUDIENCE");assert.ok(r.excluded.some(x=>x.area==="REACH"))});
-test("D הצעה עמומה",()=>assert.equal(run({offer:"generic"}).primary,"OFFER"));
-test("E מסר מפוזר עם חשיפה",()=>assert.equal(run({message:"scattered",reach:"steady"}).primary,"MESSAGE"));
-test("F עניין עם דליפה אחרי פנייה",()=>assert.equal(run({conversion:"lost"}).primary,"CONVERSION"));
-test("G כיוון ברור ללא קיבולת",()=>assert.equal(run({goal:"consistency",management:"clear_no_capacity"}).primary,"CAPACITY"));
-test("H ביצוע ללא מדידה",()=>assert.equal(run({management:"routine_unknown"}).primary,"MEASUREMENT"));
-test("I תיקו אמיתי אינו מקבל ודאות גבוהה",()=>{const r=run({management:"no_routine_no_data"});assert.equal(r.confidence,"INSUFFICIENT");assert.equal(r.primary,null)});
-test("חוסר בהירות קודם לעומס",()=>assert.equal(run({direction:"unknown",management:"too_much"}).primary,"DIRECTION"));
-test("מסלול ציבורי מוגבל לעשר שאלות",()=>{const path=buildQuestionPath(a(healthy));assert.ok(path.length<=2);assert.ok(8+path.length<=10)});
-test("פלט מקצועי ותשתית לקוח מלאים",()=>{const r=run({message:"scattered"}),c=buildClientStartingPoint(r);assert.equal(r.actionMap.length,3);assert.equal(r.workPlanSeed.first30.length,4);assert.equal(c.first30Days.length,4);assert.ok(c.questionsToValidateInMeeting.length>=3)});
+import test from"node:test";import assert from"node:assert/strict";import fs from"node:fs";import vm from"node:vm";import ts from"typescript";import{createRequire}from"node:module";
+const source=fs.readFileSync(new URL("../app/diagnostic-engine.ts",import.meta.url),"utf8"),js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText,require=createRequire(import.meta.url),mod={exports:{}},sandbox={module:mod,exports:mod.exports,require,Set,Map,Object,Math};vm.createContext(sandbox);vm.runInContext(js,sandbox);const{CORE_QUESTIONS,DIAGNOSTIC_AREAS,evaluateDiagnostic}=mod.exports;const base={goal:"more_leads",focus:"clear",audience:"clear",response:"good",message:"clear",reach:"steady",consistency:"consistent"},run=x=>evaluateDiagnostic(Object.entries({...base,...x}).map(([questionId,optionId])=>({questionId,optionId})));
+test("המבנה כולל בדיוק שבע שאלות ושבעה תחומים",()=>{assert.equal(CORE_QUESTIONS.length,7);assert.equal([...DIAGNOSTIC_AREAS].join("|"),"goal|focus|audience|response|message|reach|consistency");assert.equal(CORE_QUESTIONS.map(q=>q.stage).join("|"),"מטרה|מיקוד|קהל|תגובה לשיווק|מסר|קהל חדש|התמדה")});
+const scenarios=[
+ ["A תגובה חלשה כשהבסיס תקין",{response:"interest_low_action"},"response"],
+ ["B כיוון קודם למסר",{goal:"order",focus:"unsure",message:"scattered"},"focus"],
+ ["C רק קהל חדש חלש",{reach:"none"},"reach"],
+ ["D רק התמדה חלשה",{consistency:"no_time"},"consistency"],
+ ["E קהל חלש ופניות לא מתאימות",{audience:"unsuitable",response:"bad_leads"},"audience"],
+ ["F חשיפה קיימת בלי תגובה ומסר מפוזר",{response:"no_response",message:"scattered"},"message"],
+ ["G פניות נכנסות ואינן נסגרות",{response:"postlead"},"response"],
+ ["H קהל קודם למסר כששניהם חלשים",{audience:"broad",message:"scattered"},"audience"],
+ ["I מסר חלש פוסל אבחון חשיפה",{message:"disconnected",reach:"none"},"message"],
+ ["J חוסר בהירות קודם לעומס",{goal:"order",focus:"several",consistency:"dont_know"},"focus"]
+];for(const[name,input,expected]of scenarios)test(name,()=>assert.equal(run(input).primary,expected));
+test("עשרה תרחישים מייצרים מגוון אבחונים",()=>{const found=new Set(scenarios.map(([,x])=>run(x).primary));assert.ok(found.size>=6)});
+test("כל תוצאה מכילה דפוס, עדויות, היררכיה ותכנית אישית",()=>{for(const[,x]of scenarios){const r=run(x);assert.ok(r.headline.length>35);assert.ok(r.summary.length>45);assert.ok(r.evidence.length>=1);assert.equal(r.steps.length,3);assert.equal(r.plan.length,4);assert.equal(r.avoid.length,3);assert.equal(Object.keys(r.states).length,7)}});
+test("הרבה תשובות לא ידועות מחזירות מידע לא מספיק",()=>{const r=run({audience:"unknown",response:"unknown",message:"unknown",reach:"unknown"});assert.equal(r.primary,null);assert.equal(r.confidence,"INSUFFICIENT")});
 test("אין מקף ארוך בטקסטי המנוע",()=>assert.doesNotMatch(source,/—/));
